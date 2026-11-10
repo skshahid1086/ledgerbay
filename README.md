@@ -127,6 +127,13 @@ Privacy gate (also runs in CI):
 
 Push a tag `v*` (e.g. `v1.13.19`). The workflow `.github/workflows/release.yml` builds Windows and Linux packages on `windows-latest` and `ubuntu-latest`, and an unsigned Microsoft Store MSIX/AppX on `windows-latest`, then attaches all of them to the GitHub Release. It uses only the built-in `GITHUB_TOKEN` (no extra repo secrets). It never packages `personal/`, keystores, or backup JSON.
 
+
+## Support
+
+Privacy policy: [skshahid1086.github.io/ledgerbay/privacy.html](https://skshahid1086.github.io/ledgerbay/privacy.html)
+
+For support and privacy questions, email [work.sahid@icloud.com](mailto:work.sahid@icloud.com). You can also open an issue on the [GitHub Issues page](https://github.com/skshahid1086/ledgerbay/issues).
+
 ## License
 
 Ledgerbay is open source under the [MIT License](./LICENSE). Copyright (c) 2026 Sk Sahid.
