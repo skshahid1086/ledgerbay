@@ -2,8 +2,7 @@
 
 **Offline GST billing for Indian MSMEs** — Windows and Linux desktop apps wrapping the Ledgerbay web app (Electron).
 
-> **Source is visible but not open-source.** See [LICENSE](./LICENSE).  
-> Copyright (c) 2026 Sk Sahid. All rights reserved. Viewing this repository does **not** grant rights to copy, modify, redistribute, or use the software commercially without written permission.
+> Licensed under the [MIT License](./LICENSE). Copyright (c) 2026 Sk Sahid.
 
 Public repo: [github.com/skshahid1086/ledgerbay](https://github.com/skshahid1086/ledgerbay)
 
@@ -97,4 +96,4 @@ Push a tag `v*` (e.g. `v1.13.19`). The workflow `.github/workflows/release.yml` 
 
 ## License
 
-Proprietary — [LICENSE](./LICENSE). Source published for viewing only.
+Ledgerbay is open source under the [MIT License](./LICENSE). Copyright (c) 2026 Sk Sahid.

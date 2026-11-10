@@ -8,7 +8,7 @@ desktop/             ← Electron wrapper
 scripts/privacy-scan.sh
 scripts/attach-apk.md
 .github/workflows/release.yml   ← Windows + Linux only; APK attached offline
-LICENSE              ← proprietary (viewing only)
+LICENSE              ← MIT License
 README.md
 RELEASE-NOTES.md     ← what changed per version
 ```

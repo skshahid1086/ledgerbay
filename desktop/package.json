@@ -8,7 +8,7 @@
     "name": "Sk Sahid",
     "email": "skshahid1086@users.noreply.github.com"
   },
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "start": "electron .",

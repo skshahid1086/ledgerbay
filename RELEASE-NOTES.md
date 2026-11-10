@@ -25,7 +25,7 @@ Changes since 1.13.18:
 
 Your books are kept on upgrade (Linux `~/.config/ledgerbay`, Windows `%APPDATA%\ledgerbay`). Take a backup from **Settings → Backup** before upgrading.
 
-Copyright (c) 2026 Sk Sahid. All rights reserved.
+The source is now licensed under the MIT License. Copyright (c) 2026 Sk Sahid.
 
 ## 1.13.18
 
@@ -54,7 +54,7 @@ Changes since 1.13.9:
 
 Your books are kept on upgrade (Linux `~/.config/ledgerbay`, Windows `%APPDATA%\ledgerbay`). Take a backup from **Settings → Backup** before upgrading.
 
-Copyright (c) 2026 Sk Sahid. All rights reserved.
+Copyright (c) 2026 Sk Sahid. Licensed under the MIT License.
 
 ## 1.13.9
 
@@ -82,4 +82,4 @@ Desktop (Windows / Linux) `1.13.9`, Microsoft Store MSIX `1.13.9.0`, Android `1.
 
 Your books are kept on upgrade (Linux `~/.config/ledgerbay`, Windows `%APPDATA%\ledgerbay`). Take a backup from **Settings → Backup** before upgrading.
 
-Copyright (c) 2026 Sk Sahid. All rights reserved.
+Copyright (c) 2026 Sk Sahid. Licensed under the MIT License.

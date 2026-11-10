@@ -2,7 +2,7 @@
   "name": "ledgerbay",
   "version": "1.13.19",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "description": "Ledgerbay offline GST billing",
   "dependencies": {
     "@capacitor-mlkit/barcode-scanning": "^7.0.0",
