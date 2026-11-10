@@ -70,19 +70,21 @@ jobs:
           npm ci || npm install
           bash scripts/build-all.sh "../${{ steps.meta.outputs.web }}" "${{ steps.meta.outputs.version }}" "Ledgerbay" "in.ledgerbay.app"
           mkdir -p ../msix-out
-          cp -f dist/*.appx dist/*.msix ../msix-out/ 2>/dev/null || true
+          cp -f dist/*.appx ../msix-out/ 2>/dev/null || true
+          cp -f dist/*.msix ../msix-out/ 2>/dev/null || true
           ls -lah dist/ ../msix-out/
 
       - name: Validate AppxManifest identity (from package)
         shell: bash
         run: |
           set -e
-          PKG=$(ls msix-out/*.appx msix-out/*.msix 2>/dev/null | head -1)
-          test -n "$PKG"
           python3 - <<'PY'
           import zipfile, re, sys
           from pathlib import Path
           pkgs = list(Path("msix-out").glob("*.appx")) + list(Path("msix-out").glob("*.msix"))
+          if not pkgs:
+            print("No .appx/.msix in msix-out", file=sys.stderr)
+            raise SystemExit(1)
           z = zipfile.ZipFile(pkgs[0])
           # AppxManifest.xml is at package root
           name = next(n for n in z.namelist() if n.lower().endswith("appxmanifest.xml"))

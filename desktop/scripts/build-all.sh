@@ -108,7 +108,18 @@ if [[ "$TARGETS" == "all" || "$TARGETS" == "win" || "$TARGETS" == "windows" ]]; 
   fi
   echo "== Windows NSIS =="
   [[ -d dist/win-unpacked ]] || ./node_modules/.bin/electron-builder --win --dir --x64
-  ( cd build && makensis -V2 installer.nsi )
+  MAKENSIS="$(command -v makensis || true)"
+  if [[ -z "$MAKENSIS" ]]; then
+    for cand in       "/c/Program Files (x86)/NSIS/makensis.exe"       "/c/Program Files/NSIS/makensis.exe"       "C:/Program Files (x86)/NSIS/makensis.exe"       "C:/Program Files/NSIS/makensis.exe"; do
+      if [[ -f "$cand" ]]; then MAKENSIS="$cand"; break; fi
+    done
+  fi
+  if [[ -z "$MAKENSIS" ]]; then
+    echo "ERROR: makensis not found. Install NSIS and add it to PATH." >&2
+    exit 1
+  fi
+  echo "using makensis: $MAKENSIS"
+  ( cd build && "$MAKENSIS" -V2 installer.nsi )
 fi
 
 if [[ "$TARGETS" == "all" || "$TARGETS" == "linux" ]]; then
