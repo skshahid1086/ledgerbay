@@ -1,0 +1,210 @@
+name: Release
+
+# Builds Windows + Linux packages, plus an unsigned MSIX/AppX for Microsoft
+# Store upload, and attaches all of them to the GitHub Release for the tag.
+# Android APK is release-signed offline and attached separately
+# (see scripts/attach-apk.md). Never put keystores in this workflow.
+# Auth uses only the built-in GITHUB_TOKEN (no repo secrets required).
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  privacy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Privacy scan
+        run: bash scripts/privacy-scan.sh .
+      - name: Refuse personal / keystore paths
+        run: |
+          set -e
+          if [ -d personal ] || [ -f app/personal-seed.json ] || [ -f desktop/web/personal-seed.json ]; then
+            echo "personal seed must not be in the repo" >&2; exit 1
+          fi
+          if find . -iname '*.jks' -o -iname '*.keystore' -o -iname 'keystore.properties' | grep -q .; then
+            echo "keystore files must not be in the repo" >&2; exit 1
+          fi
+
+  linux:
+    needs: privacy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - name: Install packaging deps
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fakeroot dpkg-dev libfuse2
+      - name: Meta
+        id: meta
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          if [ -f app/index.html ]; then echo "web=app" >> "$GITHUB_OUTPUT"
+          elif [ -f web/index.html ]; then echo "web=web" >> "$GITHUB_OUTPUT"
+          else echo "No app/index.html" >&2; exit 1; fi
+      - name: Build Linux
+        working-directory: desktop
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          BUILD_TARGETS: linux
+        run: |
+          npm ci || npm install
+          bash scripts/build-all.sh "../${{ steps.meta.outputs.web }}" "${{ steps.meta.outputs.version }}" "Ledgerbay" "in.ledgerbay.app"
+          mkdir -p ../release-assets
+          cp -f dist/*.AppImage dist/*.deb ../release-assets/
+          ls -lah dist/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages
+          path: release-assets/*
+
+  windows:
+    needs: privacy
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - name: Meta
+        id: meta
+        shell: bash
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          if [ -f app/index.html ]; then echo "web=app" >> "$GITHUB_OUTPUT"
+          elif [ -f web/index.html ]; then echo "web=web" >> "$GITHUB_OUTPUT"
+          else exit 1; fi
+      - name: Build Windows
+        working-directory: desktop
+        shell: bash
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          BUILD_TARGETS: win
+        run: |
+          npm ci || npm install
+          bash scripts/build-all.sh "../${{ steps.meta.outputs.web }}" "${{ steps.meta.outputs.version }}" "Ledgerbay" "in.ledgerbay.app"
+          mkdir -p ../release-assets
+          cp -f dist/*-Setup-*.exe dist/*-Portable-*.exe ../release-assets/ || true
+          cp -f dist/*.zip ../release-assets/ 2>/dev/null || true
+          ls -lah dist/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-packages
+          path: release-assets/*
+
+  msix:
+    needs: privacy
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - name: Meta
+        id: meta
+        shell: bash
+        run: |
+          VER="${GITHUB_REF_NAME#v}"
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          if [ -f app/index.html ]; then echo "web=app" >> "$GITHUB_OUTPUT"
+          elif [ -f web/index.html ]; then echo "web=web" >> "$GITHUB_OUTPUT"
+          else echo "No app/index.html" >&2; exit 1; fi
+      - name: Install Pillow (Store tile PNGs)
+        shell: bash
+        run: python3 -m pip install --user pillow
+      - name: Build AppX / MSIX (unsigned)
+        working-directory: desktop
+        shell: bash
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          BUILD_TARGETS: appx
+        run: |
+          npm ci || npm install
+          bash scripts/build-all.sh "../${{ steps.meta.outputs.web }}" "${{ steps.meta.outputs.version }}" "Ledgerbay" "in.ledgerbay.app"
+          mkdir -p ../msix-out
+          cp -f dist/*.appx dist/*.msix ../msix-out/ 2>/dev/null || true
+          ls -lah dist/ ../msix-out/
+      - name: Validate AppxManifest identity (from package)
+        shell: bash
+        run: |
+          set -e
+          PKG=$(ls msix-out/*.appx msix-out/*.msix 2>/dev/null | head -1)
+          test -n "$PKG"
+          python3 - <<'PY'
+          import zipfile, re, sys
+          from pathlib import Path
+          pkgs = list(Path("msix-out").glob("*.appx")) + list(Path("msix-out").glob("*.msix"))
+          z = zipfile.ZipFile(pkgs[0])
+          name = next(n for n in z.namelist() if n.lower().endswith("appxmanifest.xml"))
+          xml = z.read(name).decode("utf-8", errors="replace")
+          Path("msix-out/AppxManifest.xml").write_text(xml)
+          checks = {
+            "Identity Name": r'Name="SkSahid\.Ledgerbay"',
+            "Publisher": r'Publisher="CN=799D416F-D7A9-40FB-8174-601BA874AB3C"',
+            "Version x.y.z.0": r'Version="\d+\.\d+\.\d+\.0"',
+            "DisplayName": r'>Ledgerbay<',
+          }
+          ok = True
+          for label, pat in checks.items():
+            if re.search(pat, xml):
+              print(f"OK  {label}")
+            else:
+              print(f"FAIL {label} / {pat}")
+              ok = False
+          if not ok:
+            print(xml[:2000])
+            sys.exit(1)
+          print("AppxManifest OK")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ledgerbay-msix-store
+          path: |
+            msix-out/*.appx
+            msix-out/*.msix
+            msix-out/AppxManifest.xml
+          if-no-files-found: error
+
+  publish:
+    needs: [linux, windows, msix]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Flatten + SHA256SUMS
+        run: |
+          mkdir -p out
+          find artifacts -type f \( -name '*.exe' -o -name '*.AppImage' -o -name '*.deb' -o -name '*.zip' -o -name '*.appx' -o -name '*.msix' -o -name 'AppxManifest.xml' \) -exec cp -v {} out/ \;
+          cd out
+          sha256sum * | sort > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+          ls -lah
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*
+          generate_release_notes: true
+          body: |
+            ## Downloads
+            - **Windows:** Setup `.exe` (per-user) and Portable
+            - **Linux:** AppImage (`chmod +x`) and `.deb`
+            - **Microsoft Store:** unsigned `.appx` / `.msix` (Partner Center re-signs; not a store-ready signed package)
+            - **Android APK:** attach offline with `scripts/attach-apk.md` (not built in CI — signing key stays offline)
+            - Verify: `sha256sum -c SHA256SUMS.txt` (re-generate after attaching the APK)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

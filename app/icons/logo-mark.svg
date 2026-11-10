@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Ledgerbay">
+  <!-- Rounded app tile -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#0F766E"/>
+  <!-- Open ledger (white pages) -->
+  <path d="M14 16h16.5c1.2 0 2.2.5 2.8 1.3L34 19.5V48c0 1.1-.9 2-2 2H14c-1.1 0-2-.9-2-2V18c0-1.1.9-2 2-2z" fill="#FFFFFF"/>
+  <path d="M50 16H33.5c-1.2 0-2.2.5-2.8 1.3L30 19.5V48c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V18c0-1.1-.9-2-2-2z" fill="#E6FFFA"/>
+  <!-- Spine shadow -->
+  <path d="M30 19.5L33.5 17.3c.3-.2.7-.3 1-.3H34v33h-1.5c-.6 0-1.1-.2-1.5-.6L30 48V19.5z" fill="#99F6E4" opacity=".9"/>
+  <!-- Ledger lines (left page) -->
+  <path d="M17 26h11M17 31h11M17 36h8" stroke="#0F766E" stroke-width="2" stroke-linecap="round" opacity=".55"/>
+  <!-- Rising bars / columns (right page) = billing growth -->
+  <rect x="36" y="36" width="3.5" height="8" rx="1" fill="#0F766E"/>
+  <rect x="41.5" y="31" width="3.5" height="13" rx="1" fill="#0F766E"/>
+  <rect x="47" y="25" width="3.5" height="19" rx="1" fill="#0F766E"/>
+  <!-- Check mark accent -->
+  <path d="M18 44.5l3.2 3.2 6.5-7" fill="none" stroke="#CCFBF1" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,150 @@
+{
+  "name": "ledgerbay",
+  "productName": "Ledgerbay",
+  "version": "1.13.19",
+  "description": "Ledgerbay \u2014 offline GST billing for desktop",
+  "main": "electron/main.js",
+  "author": {
+    "name": "Sk Sahid",
+    "email": "skshahid1086@users.noreply.github.com"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist:win": "electron-builder --win portable zip --x64",
+    "dist:win:portable": "electron-builder --win portable zip --x64",
+    "test:linux": "electron .",
+    "dist:win:setup": "makensis build/installer.nsi",
+    "dist:win:all": "electron-builder --win portable zip --x64 && makensis build/installer.nsi",
+    "dist:linux": "electron-builder --linux AppImage deb --x64",
+    "dist:all": "electron-builder --win portable zip --x64 && electron-builder --linux AppImage deb --x64 && makensis build/installer.nsi",
+    "privacy-scan": "bash scripts/privacy-scan.sh .",
+    "dist:msix": "python3 scripts/make-ms-store-assets.py . && electron-builder --win appx --x64"
+  },
+  "build": {
+    "appId": "in.ledgerbay.app",
+    "productName": "Ledgerbay",
+    "copyright": "Copyright \u00a9 2026 Sk Sahid",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**/*",
+      "web/**/*",
+      "package.json",
+      "!**/*.map",
+      "!web/sync-data/**",
+      "!web/sync-data-test-*/**",
+      "!web/personal-seed.json",
+      "!web/ledgerbay-mydata-backup.json"
+    ],
+    "extraResources": [],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "${productName}-${version}-win.${ext}",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Ledgerbay",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "artifactName": "${productName}-Setup-${version}.exe"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.exe"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "icon": "build",
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
+      "desktop": {
+        "Name": "Ledgerbay",
+        "Comment": "Offline GST billing",
+        "Categories": "Office;Finance;",
+        "StartupWMClass": "Ledgerbay"
+      },
+      "synopsis": "Offline GST billing for Indian MSMEs",
+      "description": "Ledgerbay offline GST billing desktop app"
+    },
+    "electronDownload": {
+      "mirror": "https://github.com/electron/electron/releases/download/"
+    },
+    "asarUnpack": [
+      "web/server.mjs",
+      "web/**/*.ttf"
+    ],
+    "forceCodeSigning": false,
+    "deb": {
+      "packageCategory": "office",
+      "maintainer": "Sk Sahid <skshahid1086@users.noreply.github.com>",
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1"
+      ]
+    },
+    "appx": {
+      "identityName": "SkSahid.Ledgerbay",
+      "publisher": "CN=799D416F-D7A9-40FB-8174-601BA874AB3C",
+      "publisherDisplayName": "Sk Sahid",
+      "applicationId": "Ledgerbay",
+      "displayName": "Ledgerbay",
+      "setBuildNumber": false,
+      "languages": [
+        "en-US"
+      ],
+      "showNameOnTiles": true,
+      "artifactName": "${productName}-${version}.appx"
+    }
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8"
+  },
+  "allowScripts": {
+    "electron@33.2.1": true
+  },
+  "homepage": "https://github.com/skshahid1086/ledgerbay"
+}

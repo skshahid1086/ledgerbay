@@ -1,0 +1,42 @@
+node_modules/
+dist/
+out/
+*.log
+.DS_Store
+.env
+.env.*
+*.jks
+*.keystore
+keystore.properties
+google-services.json
+
+# Runtime / local data
+web/sync-data/
+web/sync-data-test-*/
+**/sync-data/
+**/userdata/
+**/user-data/
+*billsetu-smoke*
+*ledgerbay-mydata-backup.json
+personal-seed.json
+personal/
+
+# Exports / backups
+*.csv
+*.xlsx
+backups/
+
+# Smoke / local screenshots may be regenerated in CI
+# (keep committed sample screens optional — ignore large traces)
+**/playwright-report/
+**/test-results/
+**/trace.zip
+
+# Electron builder
+*.blockmap
+*.nsis.7z
+__uninstaller-nsis-*
+
+# Local audit output
+firstrun-audit.json
+screens/
