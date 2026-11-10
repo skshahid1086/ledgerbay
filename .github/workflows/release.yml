@@ -168,7 +168,7 @@ jobs:
           Path("msix-out/AppxManifest.xml").write_text(xml, encoding="utf-8")
           checks = {
             "Identity Name": r'Name="SkSahid\.Ledgerbay"',
-            "Publisher": r'Publisher="CN=799D416F-D7A9-40FB-8174-601BA874AB3C"',
+            "Publisher": r"""Publisher=['\"]CN=799D416F-D7A9-40FB-8174-601BA874AB3C['\"]""",
             "Version x.y.z.0": r'Version="\d+\.\d+\.\d+\.0"',
             "DisplayName": r'>Ledgerbay<',
           }
