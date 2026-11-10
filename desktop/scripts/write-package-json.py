@@ -85,5 +85,5 @@ data.setdefault("scripts", {}).update({
   "dist:msix": "python3 scripts/make-ms-store-assets.py . && electron-builder --win appx --x64",
   "privacy-scan": "bash scripts/privacy-scan.sh .",
 })
-p.write_text(json.dumps(data, indent=2) + "\n")
+p.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 print("package.json updated")

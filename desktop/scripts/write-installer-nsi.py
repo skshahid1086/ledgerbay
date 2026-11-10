@@ -83,5 +83,5 @@ Section "Uninstall"
   DeleteRegKey HKCU "${{PRODUCT_DIR_REGKEY}}"
 SectionEnd
 '''
-(root / "build" / "installer.nsi").write_text(nsis)
+(root / "build" / "installer.nsi").write_text(nsis, encoding="utf-8")
 print("installer.nsi written")

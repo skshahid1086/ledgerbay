@@ -10,5 +10,5 @@ brand = {
   "slug": os.environ["SLUG"],
   "variant": "store",
 }
-(root / "electron" / "branding.json").write_text(json.dumps(brand, indent=2) + "\n")
+(root / "electron" / "branding.json").write_text(json.dumps(brand, indent=2) + "\n", encoding="utf-8")
 print("branding.json", brand)

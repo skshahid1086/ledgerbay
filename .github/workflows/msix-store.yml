@@ -61,6 +61,7 @@ jobs:
         shell: bash
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
+          PYTHONUTF8: "1"
           BUILD_TARGETS: appx
           # Optional overrides — defaults are Partner Center values in write-package-json.py
           # MS_STORE_IDENTITY_NAME: SkSahid.Ledgerbay
@@ -86,7 +87,7 @@ jobs:
           # AppxManifest.xml is at package root
           name = next(n for n in z.namelist() if n.lower().endswith("appxmanifest.xml"))
           xml = z.read(name).decode("utf-8", errors="replace")
-          Path("msix-out/AppxManifest.xml").write_text(xml)
+          Path("msix-out/AppxManifest.xml").write_text(xml, encoding="utf-8")
           checks = {
             "Identity Name": r'Name="SkSahid\.Ledgerbay"',
             "Publisher": r'Publisher="CN=799D416F-D7A9-40FB-8174-601BA874AB3C"',

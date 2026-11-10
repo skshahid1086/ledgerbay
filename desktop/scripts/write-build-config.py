@@ -12,7 +12,7 @@ if len(parts) == 3 and all(p.isdigit() for p in parts):
   code = int(parts[0]) * 10000 + int(parts[1]) * 100 + int(parts[2])
 sw = f"{slug}-desktop-{ver}".replace(".", "-")
 text = f'''/**
- * Desktop store build identity. VARIANT "store" → empty first run (lbIsProd).
+ * Desktop store build identity. VARIANT "store" -> empty first run (lbIsProd).
  * Written by scripts/build-all.sh — never put real customer data here.
  */
 window.LEDGERBAY_BUILD = Object.freeze({{
@@ -25,5 +25,5 @@ window.LEDGERBAY_BUILD = Object.freeze({{
   DESKTOP: true
 }});
 '''
-(web / "build-config.js").write_text(text)
+(web / "build-config.js").write_text(text, encoding="utf-8")
 print("build-config.js written VARIANT=store")
