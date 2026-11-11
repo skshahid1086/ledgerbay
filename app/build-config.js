@@ -6,8 +6,8 @@
 window.LEDGERBAY_BUILD = Object.freeze({
   APP_ID: "in.ledgerbay.app",
   APP_NAME: "Ledgerbay",
-  VERSION: "1.13.19",
-  VERSION_CODE: 169,
+  VERSION: "1.13.22",
+  VERSION_CODE: 175,
   VARIANT: "store", // overwritten per packaged build: store | personal | dev
-  SW_CACHE: "ledgerbay-v21-19"
+  SW_CACHE: "ledgerbay-v21-22"
 });

@@ -228,9 +228,8 @@
 
   function moreSheetHtml(inv) {
     const cancelled = !!(inv.cancelled || inv.status === "CANCELLED");
-    const convert = canConvert(inv)
-      ? `<button type="button" class="invd-sheet-item" data-act="convert">${icon("convert")}<span>Convert to GST bill</span></button>`
-      : "";
+    // 1.13.20: Convert lives on the sticky bar only — do not duplicate it in More.
+    const convert = "";
     const credit = (!cancelled && inv.docType !== "CREDIT_NOTE" && inv.docType !== "ESTIMATE" && inv.docType !== "PROFORMA")
       ? `<button type="button" class="invd-sheet-item" data-act="credit">${icon("credit")}<span>Credit Note / Return</span></button>`
       : "";

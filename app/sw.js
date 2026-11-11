@@ -1,4 +1,4 @@
-const CACHE = "ledgerbay-v21-19";
+const CACHE = "ledgerbay-v21-22";
 const FILES = [
   "./",
   "./index.html",

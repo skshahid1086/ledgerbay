@@ -96,7 +96,9 @@ h1, h2, h3, h4, h5 {
 .app-container {
   display: flex;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* Sidebar */

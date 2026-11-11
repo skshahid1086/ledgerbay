@@ -1,6 +1,6 @@
 {
   "name": "ledgerbay",
-  "version": "1.13.19",
+  "version": "1.13.22",
   "private": true,
   "license": "MIT",
   "description": "Ledgerbay offline GST billing",
