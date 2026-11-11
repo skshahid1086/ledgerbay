@@ -1,5 +1,34 @@
 # Ledgerbay release notes
 
+## 1.13.22
+
+Desktop (Windows / Linux) `1.13.22`, Microsoft Store MSIX `1.13.22.0`, Android `1.13.22` (store versionCode 175).
+
+Changes since 1.13.19 (the previous GitHub release):
+
+- **Narrow screens and large zoom** — list tables (sales, purchases, debit notes, overdue follow-ups, books, reports, and the rest) stack into readable cards on small viewports and at 150% zoom. If a table still will not stack, it can scroll horizontally instead of being clipped.
+- **Dashboard chips** — the transaction filter chips wrap instead of overflowing the screen.
+- **Convert to GST Bill** — stays on the sticky action bar only, and is no longer duplicated in the More sheet.
+- No billing, GST, convert-pricing, or books logic was changed in 1.13.22 itself; the work is CSS and layout. Everything from 1.13.19 is included (Review documents, proforma amounts carried over, no "Made with Ledgerbay" branding, bank details on invoices, GSTIN checksum, credit-note tax split, and old-invoice GST handling).
+- **Desktop** — ships the 1.13.22 sync server (`app/server.mjs`, `/api/health` reports 1.13.22 / 175). Data folder `~/.config/ledgerbay` (with migration from `Ledgerbay`), backup/PDF save dialog starts in Downloads, and Ctrl+P prints the open bill with its UPI QR.
+
+### Downloads
+
+| File | Platform |
+|------|----------|
+| `Ledgerbay-Setup-1.13.22.exe` | Windows installer (per-user) |
+| `Ledgerbay-Portable-1.13.22.exe` | Windows portable |
+| `Ledgerbay-1.13.22-x86_64.AppImage` | Linux AppImage |
+| `Ledgerbay-1.13.22-amd64.deb` | Debian / Ubuntu |
+| `ledgerbay-1.13.22.apk` | Android (attached offline, see `scripts/attach-apk.md`) |
+| `SHA256SUMS.txt` | Checksums of every file above |
+
+An unsigned iOS `.ipa` can be built with the manual `iOS (xtool)` workflow; it is not attached to this GitHub Release.
+
+Your books are kept on upgrade (Linux `~/.config/ledgerbay`, Windows `%APPDATA%\ledgerbay`). Take a backup from **Settings → Backup** before upgrading.
+
+The source is licensed under the MIT License. Copyright (c) 2026 Sk Sahid.
+
 ## 1.13.19
 
 Desktop (Windows / Linux) `1.13.19`, Microsoft Store MSIX `1.13.19.0`, Android `1.13.19` (store versionCode 169).

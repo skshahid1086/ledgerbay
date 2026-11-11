@@ -78,7 +78,7 @@ Packaged **store** builds set `window.LEDGERBAY_BUILD.VARIANT = "store"`. The we
 Requirements: Node 20+, Linux host recommended (cross-builds Windows + Linux). Windows NSIS uses system `makensis` (wine32 not required for our custom installer).
 
 ```bash
-./scripts/build-all.sh ../app 1.13.19 Ledgerbay in.ledgerbay.app
+./scripts/build-all.sh ../app 1.13.22 Ledgerbay in.ledgerbay.app
 
 ```
 
@@ -92,7 +92,7 @@ Privacy gate (also runs in CI):
 
 ## GitHub Releases
 
-Push a tag `v*` (e.g. `v1.13.19`). The workflow `.github/workflows/release.yml` builds Windows and Linux packages on `windows-latest` and `ubuntu-latest`, and an unsigned Microsoft Store MSIX/AppX on `windows-latest`, then attaches all of them to the GitHub Release. It uses only the built-in `GITHUB_TOKEN` (no extra repo secrets). It never packages `personal/`, keystores, or backup JSON.
+Push a tag `v*` (e.g. `v1.13.22`). The workflow `.github/workflows/release.yml` builds Windows and Linux packages on `windows-latest` and `ubuntu-latest`, and an unsigned Microsoft Store MSIX/AppX on `windows-latest`, then attaches all of them to the GitHub Release. It uses only the built-in `GITHUB_TOKEN` (no extra repo secrets). It never packages `personal/`, keystores, or backup JSON.
 
 
 ## Support

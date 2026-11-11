@@ -1,7 +1,7 @@
 {
   "name": "ledgerbay",
   "productName": "Ledgerbay",
-  "version": "1.13.19",
+  "version": "1.13.22",
   "description": "Ledgerbay \u2014 offline GST billing for desktop",
   "main": "electron/main.js",
   "author": {

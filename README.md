@@ -1,23 +1,19 @@
 # Ledgerbay (desktop)
 
-**Offline GST billing for Indian MSMEs** — Windows and Linux desktop apps wrapping the Ledgerbay web app (Electron).
+**Offline GST billing for Indian MSMEs** — Windows and Linux desktop apps wrapping the Ledgerbay web app (Electron), plus an Android APK and an unsigned iOS shell.
 
 > Licensed under the [MIT License](./LICENSE). Copyright (c) 2026 Sk Sahid.
 
 Public repo: [github.com/skshahid1086/ledgerbay](https://github.com/skshahid1086/ledgerbay)
 
-**Current packaged version: `1.13.19`** (`in.ledgerbay.app`) — store VARIANT, empty first-run, generic invoice templates.
+**Current packaged version: `1.13.22`** (`in.ledgerbay.app`) — store VARIANT, empty first-run, generic invoice templates.
 
-## What's new in 1.13.19
+## What's new in 1.13.22
 
-- **Older debit notes / Review documents** — GST documents with no stored split no longer get a guessed tax type. Classify them under Books → GST → Review documents.
-- **Convert to GST Bill** — sits next to Print on the desktop Sales list (not only in the ⋯ menu). Money already received on a proforma is carried over when you convert it.
-- **Invoice branding** — "Made with Ledgerbay" is no longer shown on invoices, prints or PDFs.
-- **Bank details on invoices** — bank name, IFSC and account number print after you add a bank with UPI; only one show-on-invoice account is kept after restart.
-- **GSTIN checksum**, and the Furniture category / sofa demo are removed so the app stays general-purpose.
-- **Credit-note tax** — re-saving a credit note against a CGST+SGST bill keeps that split.
-- **Old invoices** — editing a bill saved when the business state was blank keeps its original tax split; changing the party or place of supply asks for confirmation before GST is recalculated.
-- **Desktop** — ships the 1.13.19 sync server (`app/server.mjs`, `/api/health` reports 1.13.19 / 169).
+- **Narrow screens and large zoom** — list tables (sales, purchases, debit notes, overdue follow-ups, and the rest) stack into readable cards on small viewports and at 150% zoom, with a horizontal-scroll fallback if a table still will not fit.
+- **Dashboard chips** — the transaction filter chips wrap instead of overflowing.
+- **Convert to GST Bill** — stays on the sticky action bar only, and is no longer duplicated in the More sheet.
+- **Desktop** — ships the 1.13.22 sync server (`app/server.mjs`, `/api/health` reports 1.13.22 / 175). Everything from 1.13.19 is included.
 
 Full notes: [RELEASE-NOTES.md](./RELEASE-NOTES.md).
 
@@ -32,6 +28,7 @@ Get the latest build from [Releases](https://github.com/skshahid1086/ledgerbay/r
 | Linux | `Ledgerbay-*-x86_64.AppImage` | Run after `chmod +x` |
 | Linux | `Ledgerbay-*.deb` | Debian/Ubuntu: `sudo dpkg -i …` |
 | Android | `ledgerbay-*.apk` | Sideload. On the phone: open the APK → allow **Install unknown apps** for your browser/file manager if prompted. |
+| iOS | unsigned `.ipa` | Built by the manual [iOS (xtool)](./.github/workflows/ios.yml) workflow. Not attached to the GitHub Release. Install with your Apple ID (Sideloadly or `xtool`); a free signature lasts 7 days. |
 
 Verify downloads:
 
@@ -66,7 +63,7 @@ The publisher has a Partner Center **Individual** account. Store package identit
 | displayName | Ledgerbay |
 | Package Family Name | `SkSahid.Ledgerbay_k3en84vjpw33r` |
 | Store ID | `9P2S6F5QWN88` |
-| Version | `1.13.19.0` (revision segment must be `0`) |
+| Version | `1.13.22.0` (revision segment must be `0`) |
 
 Build the **unsigned** `.appx` with the manual workflow [`.github/workflows/msix-store.yml`](./.github/workflows/msix-store.yml) (`workflow_dispatch` on `windows-latest`). It uploads a **workflow artifact** only — **not** a GitHub Release asset. Partner Center re-signs the package. Optional env overrides: `MS_STORE_IDENTITY_NAME`, `MS_STORE_PUBLISHER`, `MS_STORE_PUBLISHER_DISPLAY_NAME`, `MS_STORE_DISPLAY_NAME`, `MS_STORE_APPLICATION_ID`.
 
@@ -112,7 +109,7 @@ Packaged **store** builds set `window.LEDGERBAY_BUILD.VARIANT = "store"`. The we
 Requirements: Node 20+, Linux host recommended (cross-builds Windows + Linux). Windows NSIS uses system `makensis` (wine32 not required for our custom installer).
 
 ```bash
-./scripts/build-all.sh ./app 1.13.19 Ledgerbay in.ledgerbay.app
+./scripts/build-all.sh ./app 1.13.22 Ledgerbay in.ledgerbay.app
 ```
 
 Artifacts land in `dist/`: Setup exe, Portable exe, AppImage, `.deb`.
@@ -125,7 +122,7 @@ Privacy gate (also runs in CI):
 
 ## GitHub Releases
 
-Push a tag `v*` (e.g. `v1.13.19`). The workflow `.github/workflows/release.yml` builds Windows and Linux packages on `windows-latest` and `ubuntu-latest`, and an unsigned Microsoft Store MSIX/AppX on `windows-latest`, then attaches all of them to the GitHub Release. It uses only the built-in `GITHUB_TOKEN` (no extra repo secrets). It never packages `personal/`, keystores, or backup JSON.
+Push a tag `v*` (e.g. `v1.13.22`). The workflow `.github/workflows/release.yml` builds Windows and Linux packages on `windows-latest` and `ubuntu-latest`, and an unsigned Microsoft Store MSIX/AppX on `windows-latest`, then attaches all of them to the GitHub Release. It uses only the built-in `GITHUB_TOKEN` (no extra repo secrets). It never packages `personal/`, keystores, or backup JSON.
 
 
 ## Support

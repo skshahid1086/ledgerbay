@@ -8,7 +8,7 @@ The release-signed APK is built elsewhere and lands at:
 ledgerbay-<version>.apk
 ```
 
-(example: `ledgerbay-1.13.19.apk`). Only the `store/` folder is public-facing — never `personal/`.
+(example: `ledgerbay-1.13.22.apk`). Only the `store/` folder is public-facing — never `personal/`.
 
 ## After a `v*` tag release is published
 
@@ -16,8 +16,8 @@ ledgerbay-<version>.apk
 2. Copy the APK next to your other assets (do not commit it to git):
 
    ```bash
-   APK=./ledgerbay-1.13.19.apk
-   TAG=v1.13.19
+   APK=./ledgerbay-1.13.22.apk
+   TAG=v1.13.22
    gh release upload "$TAG" "$APK" --clobber
    ```
 

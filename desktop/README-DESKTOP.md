@@ -1,19 +1,16 @@
-# Ledgerbay Desktop — 1.13.19
+# Ledgerbay Desktop — 1.13.22
 
 The Electron wrapper that packages Ledgerbay for Windows (installer and portable exe) and Linux (AppImage and .deb). Offline GST billing; the same books as the Ledgerbay web/PWA and Android app.
 
 See [../DESKTOP-BUILD.md](../DESKTOP-BUILD.md) for build instructions. Ready-made downloads are on the project's GitHub Releases page.
 
-## What's new in 1.13.19
+## What's new in 1.13.22
 
-- **Review documents / older debit notes:** unstamped GST documents are classified under Books → GST, not guessed in the books.
-- **Convert to GST Bill** is a primary action next to Print; proforma amounts received carry over.
-- **Invoice branding:** "Made with Ledgerbay" is no longer shown on invoices, prints or PDFs.
-- **Bank details on invoices:** bank name, IFSC and account number print after you add a bank with UPI; only one show-on-invoice account is kept after restart.
-- **GSTIN checksum**, and the Furniture category / sofa demo are removed so the app stays general-purpose.
-- **Credit-note tax:** re-saving a credit note against a CGST+SGST bill keeps that split.
-- **Old invoices:** editing a bill saved when the business state was blank keeps its original tax split; changing the party or place of supply asks for confirmation before GST is recalculated.
-- **Desktop:** the sync server shipped with the app is the 1.13.19 server and reports 1.13.19.
+- **Narrow screens and large zoom:** list tables stack into readable cards on small viewports and at 150% zoom, with a horizontal-scroll fallback.
+- **Dashboard chips** wrap instead of overflowing.
+- **Convert to GST Bill** stays on the sticky action bar only (no longer duplicated in More).
+- Everything from 1.13.19 is included: Review documents, proforma amounts carried over, no "Made with Ledgerbay" branding, bank details on invoices, GSTIN checksum, credit-note tax split, and old-invoice GST handling.
+- **Desktop:** the sync server shipped with the app is the 1.13.22 server and reports 1.13.22 / 175.
 
 ## Install
 

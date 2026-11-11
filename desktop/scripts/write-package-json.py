@@ -71,7 +71,7 @@ b["appx"] = {
   "publisherDisplayName": os.environ.get("MS_STORE_PUBLISHER_DISPLAY_NAME", "Sk Sahid"),
   "applicationId": os.environ.get("MS_STORE_APPLICATION_ID", "Ledgerbay"),
   "displayName": os.environ.get("MS_STORE_DISPLAY_NAME", "Ledgerbay"),
-  "setBuildNumber": False,  # → version 1.13.19.0 for Store
+  "setBuildNumber": False,  # → version 1.13.22.0 for Store
   "languages": ["en-US"],
   "showNameOnTiles": True,
   "artifactName": "${productName}-${version}.appx",

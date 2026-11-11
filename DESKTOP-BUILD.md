@@ -3,7 +3,7 @@
 Repo: `github.com/skshahid1086/ledgerbay` (public). Layout:
 
 ```
-app/                 ← clean store web (1.13.19), incl. server.mjs (LAN sync server)
+app/                 ← clean store web (1.13.22), incl. server.mjs (LAN sync server)
 desktop/             ← Electron wrapper
 scripts/privacy-scan.sh
 scripts/attach-apk.md
@@ -17,10 +17,10 @@ RELEASE-NOTES.md     ← what changed per version
 
 ```bash
 cd desktop
-./scripts/build-all.sh ../app 1.13.19 Ledgerbay in.ledgerbay.app
+./scripts/build-all.sh ../app 1.13.22 Ledgerbay in.ledgerbay.app
 ```
 
-Outputs in `desktop/dist/`: `Ledgerbay-Setup-1.13.19.exe`, `Ledgerbay-Portable-1.13.19.exe`, `Ledgerbay-1.13.19-x86_64.AppImage`, `Ledgerbay-1.13.19-amd64.deb`. The packaged app runs the bundled `server.mjs` for LAN sync; it reads its version from `build-config.js` (1.13.19).
+Outputs in `desktop/dist/`: `Ledgerbay-Setup-1.13.22.exe`, `Ledgerbay-Portable-1.13.22.exe`, `Ledgerbay-1.13.22-x86_64.AppImage`, `Ledgerbay-1.13.22-amd64.deb`. The packaged app runs the bundled `server.mjs` for LAN sync; it reads its version from `build-config.js` (1.13.22).
 
 ## Android APK on the same Release
 
@@ -41,4 +41,4 @@ CI does **not** build the APK. After the tag release publishes Win/Linux + `SHA2
 - Build: `BUILD_TARGETS=appx bash scripts/build-all.sh …` on **Windows only** (electron-builder refuses AppX on Linux).
 - CI: `.github/workflows/msix-store.yml` — `workflow_dispatch`, artifact `ledgerbay-msix-store`, never softprops release.
 - Do not put the Android keystore or `personal/` in this repo.
-- Store web under `app/` is the 1.13.19 release candidate; treat as not final until the owner signs off.
+- Store web under `app/` is the 1.13.22 release (store versionCode 175).
