@@ -174,7 +174,7 @@ final class LedgerbayViewController: UIViewController {
         for item in files {
             let relative = item.path.hasPrefix(root.path) ? String(item.path.dropFirst(root.path.count)) : item.lastPathComponent
             hasher.update(data: Data(relative.utf8))
-            hasher.update(data: Data(contentsOf: item))
+            hasher.update(data: try Data(contentsOf: item))
         }
         return hasher.finalize().map { String(format: "%02x", $0) }.joined()
     }
@@ -333,7 +333,7 @@ final class LedgerbayViewController: UIViewController {
 extension LedgerbayViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         let body = message.body
-        let handle = { [weak self] in
+        let handle: () -> Void = { [weak self] in
             self?.handleBridge(body)
         }
         if Thread.isMainThread {
