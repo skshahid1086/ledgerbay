@@ -1305,3 +1305,662 @@ input, textarea, select, .sheet-page { -webkit-user-select: text; user-select: t
   html body.is-printing :is(.bsf-sheet, .classic-page):not(.a5):not(.sheet-a5):not(#lb-fullpage) { min-height: 293mm !important; height: 293mm !important; }
   html body.is-printing :is(.bsf-sheet.sheet-a5, .classic-page.a5, .classic-page.sheet-a5):not(#lb-fullpage) { min-height: 206mm !important; height: 206mm !important; }
 }
+
+/* ========================================================
+   1.13.20 screen layout only: FAB clearance + reflow at
+   large text and CSS zoom. Print / A4 templates are unchanged.
+   ======================================================== */
+@media screen {
+  :root {
+    --fab-height: 3.5rem;
+    --fab-margin: 1rem;
+    --fab-clearance: calc(var(--fab-height) + var(--fab-margin));
+    --nav-height: 4rem;
+  }
+
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+  body, .app-container, .main-content, .view-viewport, .view-panel,
+  .content-card, .modal-window, .modal-body, .invoice-detail-panel,
+  .invoice-detail-root, #gst-review-panel, #gst-review-table,
+  .settings-grid, .gstr-grid, .dashboard-split-grid, .kpi-grid,
+  .party-layout, .parties-layout-grid, .invoice-summary-grid {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .view-panel, .content-card, .modal-body, .invoice-detail-panel,
+  #gst-review-panel, .settings-grid > *, .kpi-card, .dashboard-banner {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Flexible chrome: don't clip when the text scale grows. */
+  .topbar {
+    height: auto;
+    min-height: 64px;
+  }
+  .sidebar {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .brand-subtitle { max-width: 100%; }
+  .view-header, .view-header-actions, .dash-toolbar, .daybook-tools,
+  .reports-tabs, .filter-bar, .party-action-bar {
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+  }
+  #accounts-tabs, .tab-pills, .reports-tabs:not(#accounts-tabs) {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .tab-pill, #accounts-tabs .tab-pill {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+  .data-table { max-width: 100%; }
+  .table-responsive { max-width: 100%; min-width: 0; }
+  .row-actions, .data-table td.m-actions, .data-table th.m-actions {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+  .act-convert-gst {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  #gst-review-table { width: 100%; }
+  #gst-review-table td, #gst-review-table th {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    vertical-align: top;
+  }
+  #gst-review-table .m-actions, #gst-review-table .btn {
+    white-space: normal;
+  }
+
+  /* Forms and lists: shrink instead of forcing a horizontal crop. */
+  input, select, textarea, .form-control {
+    max-width: 100%;
+  }
+  .line-items-table { width: 100%; max-width: 100%; }
+  #modal-invoice .modal-window,
+  #modal-invoice .invoice-party-box,
+  #modal-invoice .items-table-section,
+  #modal-invoice .invoice-summary-grid {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* Do not let fixed header heights clip large text on these screens. */
+  .view-header h2 { overflow: visible; }
+  .kpi-card, .content-card { height: auto; }
+  .settings-grid,
+  .parties-layout-grid,
+  .gstr-grid,
+  .dashboard-split-grid,
+  .invoice-summary-grid,
+  .party-layout,
+  .pos-layout {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  }
+
+  /* Settings and inventory wrap */
+
+  .form-row { flex-wrap: wrap; }
+  .brand-upload, #view-settings .d-flex, #inventory-more, #view-inventory .view-header-actions {
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .view-header h2, .view-header p, #view-settings label, #view-inventory label,
+  #view-settings h3, #view-settings .text-muted {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+  .item-incl-label, .filter-chip { white-space: normal; max-width: 100%; }
+  .logo-preview { max-width: 100%; }
+
+  /* CSS zoom shrinks used width without changing the viewport, so width
+     media queries stay desktop. Container queries reflow the content. */
+  .main-content, .view-viewport, .view-panel, .modal-body, .invoice-detail-panel {
+    container-type: inline-size;
+  }
+  .table-responsive {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+  }
+  .topbar, .topbar-left, .topbar-actions, .view-header, .view-header-actions {
+    max-width: 100%;
+    min-width: 0;
+  }
+  .topbar { flex-wrap: wrap; }
+  .topbar-left { max-width: 100%; }
+  .search-box { max-width: 100%; min-width: 0; flex: 1 1 auto; }
+  .sidebar {
+    flex: 0 1 260px;
+    min-width: 0;
+  }
+
+  @container (max-width: 960px) {
+    .settings-grid,
+    .gstr-grid,
+    .dashboard-split-grid,
+    .party-layout,
+    .parties-layout-grid,
+    .invoice-summary-grid,
+    .pos-layout,
+    .dashboard-actions-row,
+    .banner-quick-stats {
+      grid-template-columns: 1fr !important;
+    }
+    .kpi-grid { grid-template-columns: 1fr 1fr !important; }
+    .form-row { flex-wrap: wrap; }
+    .col-3, .col-4, .col-5, .col-6 { width: 100%; max-width: 100%; }
+    .party-header-box { flex-wrap: wrap; }
+  }
+
+  @container (max-width: 560px) {
+    .kpi-grid { grid-template-columns: 1fr !important; }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .main-content {
+    padding-bottom: calc(var(--nav-height) + var(--safe-bottom));
+  }
+  .view-viewport {
+    padding-bottom: calc(24px + var(--fab-clearance));
+    scroll-padding-bottom: calc(var(--fab-clearance) + 8px);
+  }
+  #view-sales .table-responsive,
+  #view-purchases .table-responsive,
+  #view-parties .table-responsive,
+  #view-inventory .table-responsive,
+  #view-expenses .table-responsive,
+  #view-dashboard .table-responsive,
+  #view-reports .table-responsive,
+  #view-accounts .table-responsive {
+    padding-bottom: calc(var(--fab-clearance) + 8px);
+    scroll-padding-bottom: calc(var(--fab-clearance) + 8px);
+  }
+  /* Last list rows and their Print/Convert actions sit above the FAB. */
+  .table-responsive tbody tr:has(.m-title):last-child,
+  .table-responsive tbody tr.inv-row:last-child,
+  .table-responsive tbody tr.pur-row:last-child {
+    scroll-margin-bottom: calc(var(--fab-clearance) + 8px);
+  }
+
+  .mobile-fab {
+    width: var(--fab-height);
+    height: var(--fab-height);
+    min-width: var(--fab-height);
+    min-height: var(--fab-height);
+    padding: 0;
+    right: var(--fab-margin);
+    bottom: calc(var(--nav-height) + var(--safe-bottom) + var(--fab-margin));
+    border-radius: 50%;
+    overflow: hidden;
+    font-size: 0;
+    line-height: 0;
+  }
+  .mobile-fab::before {
+    content: "+";
+    font-size: 1.75rem;
+    line-height: 1;
+    font-weight: 700;
+    color: #fff;
+  }
+  #fab-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Phone list: Convert may wrap; don't force the actions column past the card. */
+  .table-responsive:has(.m-title) {
+    overflow-x: auto;
+    overflow-y: visible;
+    max-width: 100%;
+  }
+  .table-responsive tbody tr:has(.m-title) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+    max-width: 100%;
+  }
+  .table-responsive tbody tr:has(.m-title) td.m-actions {
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .table-responsive tbody tr:has(.m-title) .row-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    max-width: 100%;
+  }
+  .table-responsive tbody tr:has(.m-title) .act-convert-gst {
+    max-width: 9.5rem;
+    flex: 1 1 auto;
+  }
+  .table-responsive tbody tr:has(.m-title) td.m-title .m-party,
+  .table-responsive tbody tr:has(.m-title) td.m-title > strong,
+  .table-responsive tbody tr:has(.m-title) td.m-title .phone-sub {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .party-action-bar {
+    bottom: calc(var(--nav-height) + var(--safe-bottom));
+  }
+  body.invoice-detail-open .invd-sticky-bar {
+    padding-bottom: calc(8px + var(--safe-bottom));
+    flex-wrap: wrap;
+  }
+  .invd-bar-btn span {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+  }
+  #view-inventory .view-header-actions .btn,
+  #btn-add-item-modal {
+    flex: 1 1 auto;
+    white-space: normal;
+    max-width: 100%;
+  }
+  .filter-inputs, .filter-stats, .card-filter-bar {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+  .filter-inputs > select.form-control,
+  .filter-inputs .select-auto,
+  .filter-inputs > select.form-control:last-of-type,
+  #inventory-category-filter, #inventory-search-input {
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media screen and (min-width: 801px) {
+  .sidebar { max-width: min(260px, 40%); }
+  .main-content, .view-viewport { min-width: 0; max-width: 100%; }
+  .data-table td, .data-table th { overflow-wrap: anywhere; }
+}
+
+
+/* ========================================================
+   1.13.21 screen layout only: reflow at CSS zoom.
+   html { zoom } shrinks used width; @media (max-width) still
+   sees the unzoomed viewport. Container queries and wrapping
+   do the work. Print / A4 templates are unchanged.
+   ======================================================== */
+@media screen {
+  html, body, .app-container {
+    overflow-x: visible;
+  }
+  .toast-container {
+    max-width: min(420px, calc(100% - 24px));
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .toast {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  @keyframes slideIn {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: none; opacity: 1; }
+  }
+
+  #accounts-tabs, .tab-pills, .reports-tabs, .reports-tabs:not(#accounts-tabs) {
+    display: flex;
+    flex-wrap: wrap !important;
+    overflow-x: visible;
+    overflow-y: visible;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .tab-pill, #accounts-tabs .tab-pill {
+    flex: 0 1 auto;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+
+  @container (max-width: 960px) {
+    .card-filter-bar, .filter-inputs, .filter-stats, .dash-toolbar, .daybook-tools {
+      flex-wrap: wrap;
+      max-width: 100%;
+      min-width: 0;
+      width: 100%;
+    }
+    .card-filter-bar { flex-direction: column; align-items: stretch; }
+    .filter-inputs { flex-direction: column; align-items: stretch; }
+    .filter-inputs > input.form-control,
+    .filter-inputs > select.form-control,
+    .filter-inputs .select-auto,
+    .filter-chip, #btn-filter-unpaid {
+      flex: 1 1 auto;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .table-responsive { overflow: visible; max-width: 100%; min-width: 0; }
+    .table-responsive:has(.m-title) { overflow: visible; }
+    .table-responsive:has(.m-title) thead { display: none; }
+    .table-responsive:has(.m-title) table,
+    .table-responsive table { min-width: 0 !important; width: 100%; max-width: 100%; }
+
+    /* Sales / purchases / expenses / items / recent: stack into cards. */
+    .table-responsive tbody tr:has(.m-title) {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+      grid-template-areas:
+        "title amt"
+        "actions actions";
+      column-gap: 12px;
+      row-gap: 6px;
+      max-width: 100%;
+      width: 100%;
+      box-sizing: border-box;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 4px;
+      margin: 0;
+    }
+    .table-responsive tbody tr:has(.m-title) td { display: none; border: 0; padding: 0; }
+    .table-responsive tbody tr:has(.m-title) td.m-title {
+      display: block; grid-area: title; min-width: 0; overflow-wrap: anywhere; white-space: normal;
+    }
+    .table-responsive tbody tr:has(.m-title) td.m-title .m-party,
+    .table-responsive tbody tr:has(.m-title) td.m-title > strong,
+    .table-responsive tbody tr:has(.m-title) td.m-title .phone-sub {
+      white-space: normal; overflow-wrap: anywhere; overflow: visible; text-overflow: unset;
+    }
+    .table-responsive tbody tr:has(.m-title) td.m-amt {
+      display: block; grid-area: amt; text-align: right; justify-self: end; min-width: 0;
+    }
+    .table-responsive tbody tr:has(.m-title) td.m-actions {
+      display: flex; grid-area: actions; flex-wrap: wrap; gap: 6px;
+      width: 100%; max-width: 100%; min-width: 0; justify-content: flex-start;
+    }
+    .table-responsive tbody tr:has(.m-title) .row-actions {
+      display: flex; flex-wrap: wrap; max-width: 100%; min-width: 0; gap: 6px;
+    }
+    .table-responsive tbody tr:has(.m-title) .act-convert-gst {
+      width: auto; max-width: 100%; min-width: 0; height: auto;
+      min-height: 44px; white-space: normal;
+    }
+
+
+    /* Purchase orders (no .m-title). */
+    #view-purchases table:has(#orders-table-body) {
+      display: block; width: 100%; max-width: 100%;
+    }
+    #view-purchases table:has(#orders-table-body) thead { display: none; }
+    #view-purchases table:has(#orders-table-body) tbody,
+    #orders-table-body { display: block; width: 100%; max-width: 100%; }
+    #view-purchases table:has(#orders-table-body) tr {
+      display: grid; grid-template-columns: 1fr; gap: 2px;
+      width: 100%; max-width: 100%; padding: 10px 0;
+      border-bottom: 1px solid var(--border); box-sizing: border-box;
+    }
+    #view-purchases table:has(#orders-table-body) td,
+    #view-purchases table:has(#orders-table-body) th {
+      display: block; width: 100%; max-width: 100%;
+      white-space: normal; overflow-wrap: anywhere;
+    }
+    #view-purchases table:has(#orders-table-body) td:nth-child(1)::before { content: "PO No · "; font-weight: 600; }
+    #view-purchases table:has(#orders-table-body) td:nth-child(2)::before { content: "Date · "; font-weight: 600; }
+    #view-purchases table:has(#orders-table-body) td:nth-child(3)::before { content: "Supplier · "; font-weight: 600; }
+    #view-purchases table:has(#orders-table-body) td:nth-child(4)::before { content: "Value · "; font-weight: 600; }
+    #view-purchases table:has(#orders-table-body) td:nth-child(5)::before { content: "Status · "; font-weight: 600; }
+  }
+
+  /* Reports and Review documents are wider than the sales card table;
+     they still overflow a ~1100px desktop main column at 100%. */
+  @container (max-width: 1200px) {
+    #gst-review-table,
+    #gstr-hsn-table,
+    #view-reports .data-table,
+    #view-accounts .data-table:not(:has(.m-title)) {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+    }
+    #gst-review-table thead,
+    #gstr-hsn-table thead,
+    #view-reports .data-table thead {
+      display: none;
+    }
+    #gst-review-table tbody,
+    #gstr-hsn-table tbody,
+    #view-reports .data-table tbody {
+      display: block;
+      width: 100%;
+    }
+    #gst-review-table tr,
+    #gstr-hsn-table tr,
+    #view-reports .data-table tbody tr {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2px;
+      width: 100%;
+      max-width: 100%;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      box-sizing: border-box;
+    }
+    #gst-review-table td,
+    #gst-review-table th,
+    #gstr-hsn-table td,
+    #gstr-hsn-table th,
+    #view-reports .data-table td,
+    #view-reports .data-table th {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    #gst-review-table td:nth-child(1)::before { content: "Date · "; font-weight: 600; }
+    #gst-review-table td:nth-child(2)::before { content: "Number · "; font-weight: 600; }
+    #gst-review-table td:nth-child(3)::before { content: "Party · "; font-weight: 600; }
+    #gst-review-table td:nth-child(4)::before { content: "POS · "; font-weight: 600; }
+    #gst-review-table td:nth-child(5)::before { content: "Taxable / GST · "; font-weight: 600; }
+    #gst-review-table td:nth-child(6)::before { content: "Stored vs today · "; font-weight: 600; }
+    #gst-review-table td:nth-child(7)::before { content: "Action · "; font-weight: 600; }
+    #gst-review-table td.m-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    #gst-review-table td.m-actions::before { flex: 1 0 100%; }
+  }
+
+  #view-sales .table-responsive tbody tr:has(.m-title),
+  #view-purchases .table-responsive tbody tr:has(.m-title) {
+    scroll-margin-bottom: calc(var(--nav-height, 4rem) + var(--fab-clearance, 4.5rem) + 16px);
+  }
+
+  @container (max-width: 320px) {
+    .table-responsive tbody tr:has(.m-title) {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "title"
+        "amt"
+        "actions";
+    }
+    .table-responsive tbody tr:has(.m-title) td.m-amt {
+      justify-self: start;
+      text-align: left;
+    }
+  }
+}
+
+/* ========================================================
+   1.13.22 screen layout only: stack every .table-responsive
+   table, wrap dashboard txn chips, restore overflow-x:auto
+   as a clip safety net. Print / A4 templates are unchanged.
+   ======================================================== */
+@media screen {
+  .table-responsive {
+    overflow-x: auto;
+    overflow-y: visible;
+    max-width: 100%;
+    min-width: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .txn-filter-row, #dash-txn-filters {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    max-width: 100%;
+    min-width: 0;
+    width: 100%;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+    padding-right: 4px;
+  }
+  .txn-chip {
+    flex: 0 1 auto !important;
+    white-space: normal;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .view-header, .view-header-actions {
+    flex-wrap: wrap;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  @container (max-width: 960px) {
+    .table-responsive {
+      overflow-x: auto;
+      overflow-y: visible;
+      max-width: 100%;
+      min-width: 0;
+    }
+    .table-responsive table,
+    .data-table {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0 !important;
+    }
+    .table-responsive thead,
+    .data-table thead,
+    .data-table thead[id] {
+      display: none;
+    }
+    .table-responsive tbody,
+    .data-table tbody {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Any list row that is not already an .m-title card becomes a stack. */
+    .table-responsive tbody tr:not(:has(.m-title)),
+    .data-table tbody tr:not(:has(.m-title)),
+    .data-table thead tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+      width: 100%;
+      max-width: 100%;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      box-sizing: border-box;
+    }
+    .table-responsive tbody tr:not(:has(.m-title)) td,
+    .table-responsive tbody tr:not(:has(.m-title)) th,
+    .data-table tbody tr:not(:has(.m-title)) td,
+    .data-table tbody tr:not(:has(.m-title)) th {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      box-sizing: border-box;
+    }
+
+    #purchases-table-body td:nth-child(1)::before { content: "Bill # · "; font-weight: 600; }
+    #purchases-table-body td:nth-child(2)::before { content: "Date · "; font-weight: 600; }
+    #purchases-table-body td:nth-child(3)::before { content: "Supplier · "; font-weight: 600; }
+    #purchases-table-body td:nth-child(4)::before { content: "Taxable · "; font-weight: 600; }
+    #purchases-table-body td:nth-child(5)::before { content: "ITC · "; font-weight: 600; }
+    #purchases-table-body td:nth-child(6)::before { content: "Total · "; font-weight: 600; }
+    #purchases-table-body td:nth-child(7)::before { content: "Paid · "; font-weight: 600; }
+    #purchases-table-body td:nth-child(8)::before { content: "Status · "; font-weight: 600; }
+    #purchases-table-body td:nth-child(9)::before { content: "Actions · "; font-weight: 600; }
+    #purchases-table-body td.m-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    #purchases-table-body td.m-actions::before { flex: 1 0 100%; }
+
+    #debits-table-body td:nth-child(1)::before { content: "Note · "; font-weight: 600; }
+    #debits-table-body td:nth-child(2)::before { content: "Date · "; font-weight: 600; }
+    #debits-table-body td:nth-child(3)::before { content: "Supplier · "; font-weight: 600; }
+    #debits-table-body td:nth-child(4)::before { content: "Against bill · "; font-weight: 600; }
+    #debits-table-body td:nth-child(5)::before { content: "Amount · "; font-weight: 600; }
+
+    #dash-overdue-body td:nth-child(1)::before { content: "Bill · "; font-weight: 600; }
+    #dash-overdue-body td:nth-child(2)::before { content: "Party · "; font-weight: 600; }
+    #dash-overdue-body td:nth-child(3)::before { content: "Due date · "; font-weight: 600; }
+    #dash-overdue-body td:nth-child(4)::before { content: "Days late · "; font-weight: 600; }
+    #dash-overdue-body td:nth-child(5)::before { content: "Balance · "; font-weight: 600; }
+
+    #dash-recent-invoices td:nth-child(1)::before { content: "Party · "; font-weight: 600; }
+    #dash-recent-invoices td:nth-child(2)::before { content: "Type · "; font-weight: 600; }
+    #dash-recent-invoices td:nth-child(3)::before { content: "Doc No · "; font-weight: 600; }
+    #dash-recent-invoices td:nth-child(4)::before { content: "Date · "; font-weight: 600; }
+    #dash-recent-invoices td:nth-child(5)::before { content: "Amount · "; font-weight: 600; }
+    #dash-recent-invoices td:nth-child(6)::before { content: "Status · "; font-weight: 600; }
+    #dash-recent-invoices td:nth-child(7)::before { content: "Actions · "; font-weight: 600; }
+    #dash-recent-invoices td.m-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    #dash-recent-invoices td.m-actions::before { flex: 1 0 100%; }
+
+    #expenses-table-body td:nth-child(1)::before { content: "Date · "; font-weight: 600; }
+    #expenses-table-body td:nth-child(2)::before { content: "Category · "; font-weight: 600; }
+    #expenses-table-body td:nth-child(3)::before { content: "Amount · "; font-weight: 600; }
+    #expenses-table-body td:nth-child(4)::before { content: "Mode · "; font-weight: 600; }
+    #expenses-table-body td:nth-child(5)::before { content: "Notes · "; font-weight: 600; }
+    #expenses-table-body td:nth-child(6)::before { content: "Actions · "; font-weight: 600; }
+
+    .table-responsive td .btn,
+    .data-table td .btn,
+    .table-responsive td button,
+    .data-table td button {
+      max-width: 100%;
+      min-width: 0;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      box-sizing: border-box;
+    }
+  }
+
+  /* Keep the first Sales Convert above the fold on a 393px phone at 150% zoom. */
+  @container (max-width: 320px) {
+    #view-sales .view-header { margin-bottom: 4px; gap: 4px; }
+    #view-sales .view-header p { margin: 0; }
+    #view-sales .card-filter-bar,
+    #view-sales .filter-inputs,
+    #view-sales .filter-stats { gap: 4px; }
+    #view-sales .table-responsive { margin-top: 0; }
+  }
+}

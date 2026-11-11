@@ -1,0 +1,12 @@
+.DS_Store
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/
+/xtool
+*.ipa
+
+# Filled by scripts/build-ios.sh from the web build. Do not commit a second copy.
+/Sources/Ledgerbay/Web/**
+!/Sources/Ledgerbay/Web/.gitkeep

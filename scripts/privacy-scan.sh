@@ -39,8 +39,11 @@ PRUNE=()
 for d in "${EXCLUDE_DIRS[@]}"; do
   PRUNE+=( -path "$d" -o )
 done
-# drop trailing -o
-unset 'PRUNE[-1]'
+# drop trailing -o (bash 3.2 on macOS has no negative array subscripts)
+if [[ ${#PRUNE[@]} -gt 0 ]]; then
+  last=$((${#PRUNE[@]} - 1))
+  unset "PRUNE[$last]"
+fi
 
 fail=0
 hits_file=$(mktemp)

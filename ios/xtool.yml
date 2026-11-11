@@ -1,0 +1,7 @@
+# xtool package manifest. Signing (xtool dev / --sign) may prefix this id
+# with XTL-…. The unsigned build keeps in.ledgerbay.app.
+version: 1
+bundleID: in.ledgerbay.app
+product: Ledgerbay
+infoPath: Info.plist
+iconPath: Resources/AppIcon.png
