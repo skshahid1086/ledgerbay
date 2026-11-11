@@ -1,0 +1,67 @@
+name: iOS (xtool)
+
+# Unsigned Ledgerbay .ipa. Manual only — does not run on tags and does not
+# publish a GitHub Release. release.yml is unchanged.
+# No Apple ID, signing certificate, or keystore is used.
+
+on:
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: "SwiftPM configuration"
+        required: true
+        default: release
+        type: choice
+        options:
+          - release
+          - debug
+
+permissions:
+  contents: read
+
+jobs:
+  ipa:
+    runs-on: macos-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Privacy scan
+        run: bash scripts/privacy-scan.sh .
+
+      - name: Confirm the iOS SDK from Xcode
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-path
+          swift --version
+
+      - name: Install xtool
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 -o /tmp/xtool.app.zip \
+            "https://github.com/xtool-org/xtool/releases/download/1.24.0/xtool.app.zip"
+          rm -rf /tmp/xtool-app
+          mkdir -p /tmp/xtool-app
+          ditto -x -k /tmp/xtool.app.zip /tmp/xtool-app
+          APP="$(find /tmp/xtool-app -name xtool.app -type d -print -quit)"
+          if [[ -z "$APP" ]]; then
+            echo "xtool.app.zip did not contain xtool.app" >&2
+            find /tmp/xtool-app -maxdepth 3 -print >&2
+            exit 1
+          fi
+          sudo rm -rf /Applications/xtool.app
+          sudo mv "$APP" /Applications/xtool.app
+          sudo ln -sfn /Applications/xtool.app/Contents/Resources/bin/xtool /usr/local/bin/xtool
+          xtool --help
+
+      - name: Build unsigned IPA
+        env:
+          XTOOL_CONFIGURATION: ${{ inputs.configuration }}
+        run: bash scripts/build-ios.sh app
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ledgerbay-ios-unsigned-ipa
+          path: dist/ios/*.ipa
+          if-no-files-found: error
